@@ -1,24 +1,28 @@
 from pydantic import BaseModel, Field
-from typing import List
-import uuid
-from uuid import UUID
+from typing import List, Optional
+from uuid import uuid4
 from datetime import datetime
+from typing_extensions import Annotated
+from pydantic.functional_validators import BeforeValidator
+
+# Represents an ObjectId field in the database.
+# It will be represented as a `str` on the model so that it can be serialized to JSON.
+PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class Message(BaseModel):
-    messageId: str = Field(default_factory=uuid.uuid4, alias="_id")
-    messageContent: str
-    creationTimeStamp: datetime = Field(default_factory=datetime.utcnow)
-    isUser: bool
+    messageId: Optional[PyObjectId] = Field(alias="_id", title = "Message Id", default=None)
+    messageContent: str = Field(title = "Message content", default = "")
+    creationTimeStamp: datetime = Field(title = "Creation time stamp", default_factory=datetime.utcnow)
+    isUser: bool = Field(title = "Is the message sent by the user or not", default = None)
 
 class Conversation(BaseModel):
     messages: List[Message]
-    conversationId: str = Field(default_factory=uuid.uuid4, alias="_id")
-    textId: str = Field(default_factory=uuid.uuid4)
-    creationTimeStamp: datetime = Field(default_factory=datetime.utcnow)
-
+    conversationId: Optional[PyObjectId] = Field(alias="_id", title = "Conversation Id", default=None)
+    textId: Optional[PyObjectId] = Field(title = "Text Id associated with the conversation", default = None)
+    creationTimeStamp: datetime = Field(title = "Creation time stamp", default_factory=datetime.utcnow)
 
 class PostMessage(BaseModel):
     messageContent: str = Field(..., title = "Content of the message")
 
 class CreateConversation(BaseModel):
-    textId: str  = Field(..., title = "Text ID")
+    textId: Optional[PyObjectId] = Field(title = "Text Id")

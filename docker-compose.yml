@@ -1,0 +1,20 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  chat-text-db:
+    image: mongo
+    restart: always
+    container_name: chat-text-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  app:
+    image: talk-to-text:latest
+    container_name: app
+    restart: always
+    ports:
+      - 8080:8000
+    environment:
+      MONGO_DB_URL: mongodb://root:example@chat-text-db:27017/
