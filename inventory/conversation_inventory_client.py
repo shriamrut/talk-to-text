@@ -11,15 +11,15 @@ class ConversationInventoryClient:
         self.conversation_collection = MongoClient(os.environ["MONGO_DB_URL"])["talk-to-text"]["conversation"]
 
     def create_conversation(self, conversation: Conversation):
-        conversation_dict = conversation.dict()
-        result = self.conversation_collection.insert_one(conversation_dict)
+        #conversation_dict = conversation.dict()
+        result = self.conversation_collection.insert_one(conversation.model_dump(by_alias = True, exclude = ["id"]))
         new_conversation = self.conversation_collection.find_one({"_id": result.inserted_id})
         return new_conversation
 
-    def post_message_to_conversation(self, message: Message, conversation_id: str):
+    def post_message_to_conversation(self, message: Message, id: str):
         message_dict = message.dict()
         result = self.conversation_collection.update_one(
-            {"_id": ObjectId(conversation_id)},
+            {"_id": ObjectId(id)},
             {"$push": {"messages": message_dict}}
         )
         if result.modified_count == 1:
@@ -33,14 +33,14 @@ class ConversationInventoryClient:
             conversation["_id"] = str(conversation["_id"])
         return conversations
     
-    def get_conversation(self, conversationId: str):
-        conversation = self.conversation_collection.find_one({"_id": ObjectId(conversationId)})
+    def get_conversation(self, id: str):
+        conversation = self.conversation_collection.find_one({"_id": ObjectId(id)})
         if conversation:
             conversation["_id"] = str(conversation["_id"])
             return conversation
         else:
             return None
         
-    def delete_conversation(self, conversationId: str):
-        conversation = self.conversation_collection.delete_one({"_id":  ObjectId(conversationId)})
+    def delete_conversation(self, id: str):
+        conversation = self.conversation_collection.delete_one({"_id":  ObjectId(id)})
         return conversation
