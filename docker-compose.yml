@@ -18,3 +18,10 @@ services:
       - 8080:8000
     environment:
       MONGO_DB_URL: mongodb://root:example@chat-text-db:27017/
+      CHROMA_DB_URL: chroma-vector-db
+      CHROMA_DB_PORT: 8000
+  chroma-vector-db:
+    image: chromadb/chroma
+    restart: always
+    container_name: chroma-vector-db
+    

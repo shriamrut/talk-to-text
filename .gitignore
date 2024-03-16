@@ -4,5 +4,9 @@
 # Ignore Python cache directories
 __pycache__/
 
+
+#Datastore
+.DS_Store
+
 # Ignore virtual env
 venv/

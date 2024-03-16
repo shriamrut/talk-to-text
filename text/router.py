@@ -1,23 +1,28 @@
-from typing import List
-from text.models.text import Text, CreateText
-import uuid
-from datetime import datetime
-from uuid import UUID
+from inventory.embedding_collection import EmbeddingCollection
+from inventory.text_collection import TextCollection
+from text.models.text import TextResponse, UploadText
+from fastapi import Depends
 
-text_lists = []
-
-class TextController:
+class TextRouter:
 
     def __init__(self, app, tags):
+        self.embedding_collection = EmbeddingCollection()
+        self.text_collection = TextCollection()
+
         @app.post("/v1/texts/", tags = tags)
-        async def add_text(createText: CreateText) -> Text:
-            text = Text(textId = uuid.uuid4(),
-                               title = createText.title,
-                               text = createText.text,
-                               creationTimeStamp = str(datetime.now()))
-            text_lists.append(text)
-            return text
+        async def upload_text(uploadText: UploadText = Depends()):
+            content = await uploadText.file.read()
+            file_content = content.decode("utf-8")
+            id = self.text_collection.create(file_content, uploadText.title)
+            self.embedding_collection.create(file_content, text_id=id)
+            return TextResponse(id = id)
         
+        @app.post("/v1/texts/{id}", tags = tags)
+        async def get_relevant_texts(query: str, id: str):
+            return self.embedding_collection.query(text_id = id, 
+                                                   query_text = query)
+        
+        '''
         @app.get("/v1/texts", tags = tags)
         def get_texts() -> List[Text]:
             return text_lists
@@ -51,3 +56,4 @@ class TextController:
                 text_lists.append(text)
                 return text
             return {}
+    '''
