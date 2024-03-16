@@ -1,26 +1,27 @@
-from inventory.embedding_collection import EmbeddingCollection
-from inventory.text_collection import TextCollection
+from inventory.client.embedding_collection import EmbeddingCollection
+from inventory.client.text_collection import TextCollection
 from text.models.text import TextResponse, UploadText
 from fastapi import Depends
+
+from text.service import TextService
 
 class TextRouter:
 
     def __init__(self, app, tags):
         self.embedding_collection = EmbeddingCollection()
-        self.text_collection = TextCollection()
+        self.text_service = TextService()
 
         @app.post("/v1/texts/", tags = tags)
         async def upload_text(uploadText: UploadText = Depends()):
             content = await uploadText.file.read()
-            file_content = content.decode("utf-8")
-            id = self.text_collection.create(file_content, uploadText.title)
-            self.embedding_collection.create(file_content, text_id=id)
+            id = self.text_service.upload_text(content, 
+                                               uploadText.title)
             return TextResponse(id = id)
         
         @app.post("/v1/texts/{id}", tags = tags)
         async def get_relevant_texts(query: str, id: str):
-            return self.embedding_collection.query(text_id = id, 
-                                                   query_text = query)
+            return self.text_service.get_relevant_texts(id, 
+                                                        query)
         
         '''
         @app.get("/v1/texts", tags = tags)

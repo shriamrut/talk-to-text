@@ -4,15 +4,21 @@ from datetime import datetime
 from uuid import UUID
 from chat.models.conversation import Conversation, Message, CreateConversation, PostMessage
 import logging
-from inventory.conversation_collection import ConversationCollection
+from inventory.client.conversation_collection import ConversationCollection
 from fastapi.responses import Response
 from fastapi import HTTPException, status, Body
+
+from llm.service import LLMService
+from text.service import TextService
 
 
 class ConversationRouter:
 
     def __init__(self, app, tags):
         self.conversation_collection = ConversationCollection()
+        self.llm_service = LLMService(model_name = "microsoft/phi-2")
+        self.text_service = TextService()
+        
         @app.post("/v1/conversations/", tags = tags,
                   response_description = "Create new conversation",
                   response_model = Conversation,
@@ -33,9 +39,14 @@ class ConversationRouter:
                   response_model_by_alias = False,)
         async def post_message(id: str, postMessage: PostMessage = Body(...)):
             logging.info(f"Got message from user: {postMessage.messageContent}")
+        
+            relevant_texts = self.text_service.get_relevant_texts(id, 
+                                                                  postMessage.messageContent)
+            generated_text = self.llm_service.query(relevant_texts=relevant_texts,
+                                                    query=postMessage.messageContent)
             message = Message(messageContent = postMessage.messageContent,
                             isUser = True)
-            response_message = Message(messageContent = "Hi, in WIP!",
+            response_message = Message(messageContent = generated_text,
                                        isUser = False)
             # Need to check if it returns true
             self.conversation_collection.add_message_to_conversation(message, id)

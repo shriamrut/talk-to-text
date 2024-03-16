@@ -17,7 +17,7 @@ class Text(BaseModel):
     creationTimeStamp: datetime = Field(title = "Creation time stamp", default_factory=datetime.utcnow)
 
 class TextResponse(BaseModel):
-    id: Optional[PyObjectId] = Field(default=None)
+    id: Optional[PyObjectId] = Field(default=None, title="Id of the text")
 
 class UploadText(BaseModel):
     file: UploadFile = File(...)
