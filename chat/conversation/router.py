@@ -16,7 +16,7 @@ class ConversationRouter:
 
     def __init__(self, app, tags):
         self.conversation_collection = ConversationCollection()
-        self.llm_service = LLMService(model_name = "microsoft/phi-2")
+        self.llm_service = LLMService()
         self.text_service = TextService()
         
         @app.post("/v1/conversations/", tags = tags,

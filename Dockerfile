@@ -17,6 +17,9 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
+# Download models for LLM from hugging face
+RUN python3 llm/pre-requisite.py
+
 # Expose port 8000 to allow communication to the FastAPI application
 EXPOSE 8000
 

@@ -20,7 +20,8 @@ services:
       MONGO_DB_URL: mongodb://root:example@chat-text-db:27017/
       CHROMA_DB_URL: chroma-vector-db
       CHROMA_DB_PORT: 8000
-      HF_TOKEN: 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
+      HF_MODEL_NAME: microsoft/phi-2
+      HF_TOKENIZER_MODEL: microsoft/phi-2
   chroma-vector-db:
     image: chromadb/chroma
     restart: always

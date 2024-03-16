@@ -1,12 +1,15 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextStreamer
 import os
+import torch
 
 class LLMService:
-    def __init__(self, model_name, hf_token = None, device = 'cpu'):
-        hf_token = os.environ['HF_TOKEN']
+    def __init__(self):
+        model_name = os.environ["HF_MODEL"]
+        tokenizer_model_name = os.environ["HF_TOKENIZER_MODEL"]
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.device = device
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, token = hf_token)
-        self.model = AutoModelForCausalLM.from_pretrained(model_name, token = hf_token).to(device)
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(model_name).to(device)
     
     def query(self, relevant_texts, query, max_new_tokens = 500, temperature = 0.7, do_sample = True):
         context = "[" + ",".join(relevant_texts) + "]" 
