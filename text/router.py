@@ -1,5 +1,3 @@
-from inventory.client.embedding_collection import EmbeddingCollection
-from inventory.client.text_collection import TextCollection
 from text.models.text import TextResponse, UploadText
 from fastapi import Depends
 
@@ -8,7 +6,6 @@ from text.service import TextService
 class TextRouter:
 
     def __init__(self, app, tags):
-        self.embedding_collection = EmbeddingCollection()
         self.text_service = TextService()
 
         @app.post("/v1/texts/", tags = tags)
@@ -20,8 +17,8 @@ class TextRouter:
         
         @app.post("/v1/texts/{id}", tags = tags)
         async def get_relevant_texts(query: str, id: str):
-            return self.text_service.get_relevant_texts(id, 
-                                                        query)
+            return self.text_service.get_relevant_texts(text_id=id, 
+                                                        query=query)
         
         '''
         @app.get("/v1/texts", tags = tags)
