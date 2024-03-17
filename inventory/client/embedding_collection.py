@@ -4,7 +4,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import chromadb
 
 class EmbeddingCollection:
-    def __init__(self, chunk_size = 250, chunk_overlap = 200, add_start_index=True):
+    def __init__(self, chunk_size = 1000, chunk_overlap = 200, add_start_index=True):
         self.client = chromadb.HttpClient(host = os.environ['CHROMA_DB_URL'], 
                                           port = os.environ['CHROMA_DB_PORT'])
         

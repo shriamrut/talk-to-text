@@ -1,8 +1,7 @@
 # Load model directly
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import os
 
-tokenizer = AutoTokenizer.from_pretrained(os.environ["HF_TOKENIZER_MODEL"], 
+tokenizer = AutoTokenizer.from_pretrained("openai-community/gpt2", 
                                           trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained(os.environ["HF_MODEL"],
+model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2",
                                             trust_remote_code=True)

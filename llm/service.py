@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, TextStreamer
 import os
 import torch
+import logging
 
 class LLMService:
     def __init__(self):
@@ -14,10 +15,10 @@ class LLMService:
     def query(self, relevant_texts, query, max_new_tokens = 500, temperature = 0.7, do_sample = True):
         context = "[" + ",".join(relevant_texts) + "]" 
         prompt = self._get_prompt(context, query)
+        logging.debug(f"Prompt: {prompt}")
         input_ids = self.tokenizer.encode(prompt, return_tensors="pt").to(self.device)
-        streamer = TextStreamer(self.tokenizer)
-        outputs = self.model.generate(input_ids, do_sample=do_sample, temperature=temperature, streamer=streamer, max_new_tokens=max_new_tokens)
-        generated_text = self.tokenizer.batch_decode(outputs, skip_special_tokens = True)
+        output = self.model.generate(input_ids, do_sample=do_sample, temperature=temperature, max_new_tokens=max_new_tokens)
+        generated_text = self.tokenizer.decode(output[0], skip_special_tokens=True)
         return generated_text
 
     def _get_prompt(self, context, query):

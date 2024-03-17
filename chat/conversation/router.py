@@ -18,6 +18,7 @@ class ConversationRouter:
         self.conversation_collection = ConversationCollection()
         self.llm_service = LLMService()
         self.text_service = TextService()
+        self.logger = logging.getLogger(__name__)
         
         @app.post("/v1/conversations/", tags = tags,
                   response_description = "Create new conversation",
@@ -26,7 +27,7 @@ class ConversationRouter:
                   response_model_by_alias = False,)
         async def create_conversation(createConversation: CreateConversation = Body(...)):
             textId = createConversation.textId
-            logging.info(f"Creating conversation on text with id {textId}")
+            self.logger.info(f"Creating conversation on text with id {textId}")
             conversation = Conversation(messages = [], 
                                         textId = textId)
             conversation_from_db = self.conversation_collection.create_conversation(conversation)
@@ -38,10 +39,11 @@ class ConversationRouter:
                   status_code = status.HTTP_202_ACCEPTED,
                   response_model_by_alias = False,)
         async def post_message(id: str, postMessage: PostMessage = Body(...)):
-            logging.info(f"Got message from user: {postMessage.messageContent}")
+            self.logger.info(f"Got message from user: {postMessage.messageContent} for text id {id}")
         
-            relevant_texts = self.text_service.get_relevant_texts(id, 
-                                                                  postMessage.messageContent)
+            relevant_texts = self.text_service.get_relevant_texts(text_id=id, 
+                                                                  query=postMessage.messageContent)
+            self.logger.info(f"Relevant texts retrieved: {relevant_texts}")
             generated_text = self.llm_service.query(relevant_texts=relevant_texts,
                                                     query=postMessage.messageContent)
             message = Message(messageContent = postMessage.messageContent,
