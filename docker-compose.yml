@@ -20,8 +20,8 @@ services:
       MONGO_DB_URL: mongodb://root:example@chat-text-db:27017/
       CHROMA_DB_URL: chroma-vector-db
       CHROMA_DB_PORT: 8000
-      HF_MODEL: openai-community/gpt2
-      HF_TOKENIZER_MODEL: openai-community/gpt2
+      HF_MODEL: Felladrin/Sheared-Pythia-160m-WebGLM-QA
+      HF_TOKENIZER_MODEL: Felladrin/Sheared-Pythia-160m-WebGLM-QA
   chroma-vector-db:
     image: chromadb/chroma
     restart: always
