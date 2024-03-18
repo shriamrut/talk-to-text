@@ -22,3 +22,5 @@ class TextResponse(BaseModel):
 class UploadText(BaseModel):
     file: UploadFile = File(...)
     title: str = Field(title = "Title of the text", default = None)
+    chunkSize: int = Field(title = "Chunking of the text", default = 250)
+    chunkOverlap: int = Field(title = "Chunk overlap of the text", default = 25)

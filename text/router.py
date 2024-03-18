@@ -11,8 +11,10 @@ class TextRouter:
         @app.post("/v1/texts/", tags = tags)
         async def upload_text(uploadText: UploadText = Depends()):
             content = await uploadText.file.read()
-            id = self.text_service.upload_text(content, 
-                                               uploadText.title)
+            id = self.text_service.upload_text(content_in_bytes=content, 
+                                               title=uploadText.title,
+                                               chunk_size=uploadText.chunkSize,
+                                               chunk_overlap=uploadText.chunkOverlap)
             return TextResponse(id = id)
         
         @app.post("/v1/texts/{id}", tags = tags)
