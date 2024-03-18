@@ -39,11 +39,11 @@ class ConversationRouter:
                   status_code = status.HTTP_202_ACCEPTED,
                   response_model_by_alias = False,)
         async def post_message(id: str, postMessage: PostMessage = Body(...)):
-            self.logger.info(f"Got message from user: {postMessage.messageContent} for text id {id}")
-        
-            relevant_texts = self.text_service.get_relevant_texts(text_id=id, 
+            print(f"Got message from user: {postMessage.messageContent} for text id {id}")
+            text_id = self.conversation_collection.get_conversation(id = id)['textId']
+            relevant_texts = self.text_service.get_relevant_texts(text_id=text_id, 
                                                                   query=postMessage.messageContent)
-            self.logger.info(f"Relevant texts retrieved: {relevant_texts}")
+            print(f"Relevant texts retrieved: {relevant_texts}")
             generated_text = self.llm_service.query(relevant_texts=relevant_texts,
                                                     query=postMessage.messageContent)
             message = Message(messageContent = postMessage.messageContent,
