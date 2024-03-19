@@ -42,7 +42,8 @@ class ConversationRouter:
             print(f"Got message from user: {postMessage.messageContent} for text id {id}")
             text_id = self.conversation_collection.get_conversation(id = id)['textId']
             relevant_texts = self.text_service.get_relevant_texts(text_id=text_id, 
-                                                                  query=postMessage.messageContent)
+                                                                  query=postMessage.messageContent,
+                                                                  reference_chunk_count = postMessage.referenceChunkCount)
             print(f"Relevant texts retrieved: {relevant_texts}")
             generated_text = self.llm_service.query(relevant_texts=relevant_texts,
                                                     query=postMessage.messageContent)
