@@ -24,6 +24,7 @@ class Conversation(BaseModel):
 
 class PostMessage(BaseModel):
     messageContent: str = Field(..., title = "Content of the message")
+    referenceChunkCount: int = Field(default = 7, title = "Number of reference chunks to be considered for RAG")
 
 class CreateConversation(BaseModel):
     textId: Optional[PyObjectId] = Field(title = "Text Id")

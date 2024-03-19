@@ -17,7 +17,8 @@ class TextService:
                                          chunk_overlap=chunk_overlap)
         return id
     
-    def get_relevant_texts(self, text_id, query):
+    def get_relevant_texts(self, text_id, query, reference_chunk_count):
         relevant_docs = self.embedding_collection.query(text_id = text_id, 
-                                                   query_text = query)
+                                                   query_text = query,
+                                                   reference_chunk_count = reference_chunk_count)
         return relevant_docs["documents"][0]

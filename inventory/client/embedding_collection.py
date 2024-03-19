@@ -20,8 +20,8 @@ class EmbeddingCollection:
                        metadatas=metadatas, 
                        ids = split_ids)
 
-    def query(self, text_id, query_text):
+    def query(self, text_id, query_text, reference_chunk_count):
         collection = self.client.get_or_create_collection(name = "embeddings")
         return collection.query(query_texts=[query_text],
-                                n_results=10,
+                                n_results=reference_chunk_count,
                                 where={"text_id":text_id})

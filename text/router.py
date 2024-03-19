@@ -18,9 +18,10 @@ class TextRouter:
             return TextResponse(id = id)
         
         @app.post("/v1/texts/{id}", tags = tags)
-        async def get_relevant_texts(query: str, id: str):
+        async def get_relevant_texts(query: str, id: str, referenceChunkCount: int):
             return self.text_service.get_relevant_texts(text_id=id, 
-                                                        query=query)
+                                                        query=query,
+                                                        reference_chunk_count=referenceChunkCount)
         
         '''
         @app.get("/v1/texts", tags = tags)
