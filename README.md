@@ -17,8 +17,13 @@ docker build -t talk-to-text:latest .
 docker compose up -d
 ```
 
-Then go to url to access the fast API api docs to trigger the APIs (Currently only the backend is ready!)
+Then go to url to access the fast API api docs to trigger the APIs, and get started.
 ```
-https://localhost:8000
+http://localhost:8080/docs
 ```
+
+##### Basic steps involved
+1. Upload a raw text using the texts API.
+2. Create a conversation using the textId obtained in the text API.
+3. Then post the query that you want to get from the text to the conversation.
 
