@@ -3,7 +3,9 @@ A simple application that helps to talk with raw texts using RAG (Retrieval Augm
 
 
 #### How to get started?
-Have docker pre-installed in the host / machine that you are planning to run this app, and configured as well.
+Have docker pre-installed in the host / machine that you are planning to run this app, and configured as well. 
+
+**Note: For faster performance, good to use machines having GPUs.**
 
 
 1. First build the image of the app using docker
