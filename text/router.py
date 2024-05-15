@@ -22,39 +22,3 @@ class TextRouter:
             return self.text_service.get_relevant_texts(text_id=id, 
                                                         query=query,
                                                         reference_chunk_count=referenceChunkCount)
-        
-        '''
-        @app.get("/v1/texts", tags = tags)
-        def get_texts() -> List[Text]:
-            return text_lists
-
-        @app.get("/v1/texts/{textId}", tags = tags)
-        def get_text(textId: UUID) -> Text:
-            for text in text_lists:
-                if text.textId == textId:
-                    return text
-            return {}
-        
-        @app.delete("/v1/texts/{textId}", tags = tags)
-        async def delete_text(textId: UUID) -> Text:
-            global text_lists
-            selected_text = get_text(textId)
-            if selected_text:
-                text_lists = [text for text in text_lists if text.textId != textId]
-                return selected_text
-            return {}
-        
-        @app.put("/v1/texts/{textId}", tags = tags)
-        async def put_text(textId: UUID, createText: CreateText) -> Text:
-            global text_lists
-            selected_text = get_text(textId)
-            if selected_text:
-                text_lists = [text for text in text_lists if text.textId != textId]
-                text = Text(textId = selected_text.textId,
-                            title = createText.title,
-                            text = createText.text,
-                            creationTimeStamp = str(datetime.now()))
-                text_lists.append(text)
-                return text
-            return {}
-    '''
