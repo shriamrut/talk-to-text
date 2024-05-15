@@ -29,3 +29,10 @@ http://localhost:8080/docs
 2. Create a conversation using the textId obtained in the text API.
 3. Then post the query that you want to get from the text to the conversation.
 
+
+#### TODOs
+1. Use fastAPI's router interface for multiple routings
+2. Provide API way to customize the hugging face model used. Same goes for prompt template.
+3. Provide API way to customize text chunking, and vectorization.
+4. Add UI / UX to have a Chat UI.
+5. Use multiple models in same conversations. (Query can be directed to a specific model, based on '@' annotation)
