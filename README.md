@@ -31,8 +31,9 @@ http://localhost:8080/docs
 
 
 #### TODOs
-1. Use fastAPI's router interface for multiple routings
-2. Provide API way to customize the hugging face model used. Same goes for prompt template.
-3. Provide API way to customize text chunking, and vectorization.
-4. Add UI / UX to have a Chat UI.
-5. Use multiple models in same conversations. (Query can be directed to a specific model, based on '@' annotation)
+1. Use Ollama instead of Hugging Face
+2. Use fastAPI's router interface for multiple routings
+3. Provide API way to customize the hugging face model used. Same goes for prompt template.
+4. Provide API way to customize text chunking, and vectorization.
+5. Add UI / UX to have a Chat UI.
+6. Use multiple models in same conversations. (Query can be directed to a specific model, based on '@' annotation)
